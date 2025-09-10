@@ -16,3 +16,6 @@ _site/
 # counterproductive to check this file into the repository.
 # Details at https://github.com/github/pages-gem/issues/768
 Gemfile.lock
+BPTake3/.vs/BPTake3/FileContentIndex/cd281ee1-b42e-49ac-bf9e-b3c0e1a6c0da.vsidx
+/BPTake3/BPTake3/obj
+/BPTake3/.vs/BPTake3/v17
