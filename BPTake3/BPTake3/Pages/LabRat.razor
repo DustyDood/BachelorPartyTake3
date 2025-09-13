@@ -1,9 +1,9 @@
 ﻿@inject IJSRuntime JSRuntime
 
 
-@page "/Labrat"
+@page "/StepOne"
 
-<h3>Success!</h3>
+<h1>Success!</h1>
 
 <p>Now that we've confirmed that things are good, <strong>YOU</strong> will be in charge of distributing the next clues!</p>
 
@@ -11,16 +11,22 @@
 
 <p>Author's note: I could have set up these links with phone numbers, but I didn't want everyone's number to be public and github pages doesn't allow for secret grabbing soooo please replace their names with their phone number. Thank you!</p>
 
-<p>Part 1: Take a look</p>
-<a href="sms:+Drew?body=An%20item%20of%20the%20UPMOST%20importance%20(3)">First</a>
+<h2 class="fw-bold">Part 1: Take a look</h2>
+<a class="fs-2" href="sms:+Drew?body=An%20item%20of%20the%20UPMOST%20importance%20(3)">First</a>
+<br />
+<a class="fs-2" href="sms:+Nick?body=The%20first%20key%20on%20a%20keyboard%20(3)">Second</a>
+<br />
+<br />
 
-<a href="sms:+Nick?body=The%20first%20key%20on%20a%20keyboard%20(3)">Second</a>
 
-<p>Part 2: Sound it out</p>
+<h2 class="fw-bold">Part 2: Sound it out</h2>
 
-<a href="sms:+Kevin?body=%20%20%20%20The%20rival%20to%20Kira(1)%0A%20%20%20%20Canadian%20Confirmation(2)%0A%20%20%20%20The%20apiary%20animal(3)">Third</a>
+<a class="fs-2" href="sms:+Kevin?body=%20%20%20%20The%20rival%20to%20Kira(1)%0A%20%20%20%20Canadian%20Confirmation(2)%0A%20%20%20%20The%20apiary%20animal(3)">Third</a>
+<br />
+<a class="fs-2" href="sms:+Yourself?body=Singular%20%3A%20is%20%3A%3A%20Plural%20%3A%3A%20%3F%20(3)%0AUnder%20my%20Umbrella%20(1)%0AA%20suffix%20to%20high%3B%20a%20prefix%20to%20party%20(3)">Fourth</a>
+<br />
+<br />
 
-<a href="sms:+Yourself?body=Singular%20%3A%20is%20%3A%3A%20Plural%20%3A%3A%20%3F%20(3)%0AUnder%20my%20Umbrella%20(1)%0AA%20suffix%20to%20high%3B%20a%20prefix%20to%20party%20(3)">Fourth</a>
 
 @code {
     private string phoneNumber = "";
