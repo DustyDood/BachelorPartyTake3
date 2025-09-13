@@ -1,7 +1,52 @@
-﻿@page "/"
+﻿@inject IJSRuntime JSRuntime
+
+@page "/"
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h3>Hello, and welcome to the start of your bachelor party!</h3>
 
-Welcome to your new app.
+<p>Today's adventure is like a scavenger hunt. On each page, you'll have some form of puzzle and a button. The puzzle will point you to where you need to go next, while the button will confirm your location and how close/far you are.</p>
+
+<p>Right now, everyone should be on their way here to celebrate your bachelor party! For now, we'll test to make sure this application is working correctly.</p>
+
+<p>For this first puzzle, I've set up the location to be your house. If successful, you'll be taken to the next page.</p>
+    
+<p>If it's not successful... I will be sad, but we can manually navigate the tree. Please DO NOT use the navigation tree otherwise!</p>
+
+<p>Now, let's go ahead and try that button!</p>
+
+<button>Find your location below</button>
+
+
+@code {
+    private string? Latitude { get; set; }
+    private string? Longitude { get; set; }
+    private string? ErrorMessage { get; set; }
+
+    private async Task GetLocationAsync()
+    {
+        try
+        {
+            var position = await JSRuntime.InvokeAsync<GeolocationPosition>("navigator.geolocation.getCurrentPosition");
+            Latitude = position.Coords.Latitude.ToString();
+            Longitude = position.Coords.Longitude.ToString();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Error retrieving location: {ex.Message}";
+        }
+    }
+
+    public class GeolocationPosition
+    {
+        public GeolocationCoordinates Coords { get; set; } = new();
+    }
+
+    public class GeolocationCoordinates
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+}
+

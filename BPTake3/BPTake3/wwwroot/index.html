@@ -32,6 +32,12 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+    <script>
+        window.decodeBase64 = function (encoded) {
+            return atob(encoded);
+        };
+    </script>
+
 </body>
 
 </html>
