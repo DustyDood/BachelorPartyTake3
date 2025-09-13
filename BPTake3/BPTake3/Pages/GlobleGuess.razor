@@ -1,0 +1,127 @@
+﻿@page "/GlobleGuess"
+@inject HttpClient Http
+@using System.Net.Http.Json
+
+
+<h3>GlobleGuess</h3>
+
+<h2>🌍 Guess the Country Challenge</h2>
+
+<p>
+    <strong>Welcome, traveler!</strong><br>
+    You're about to embark on a geography guessing game. Your mission: figure out the mystery country I've locked away in my digital vault.
+</p>
+
+<h3>🕹️ How to Play:</h3>
+<ul>
+    <li>Type the name of any country.</li>
+    <li>I’ll tell you how close your guess is to the mystery country using <strong>distance clues</strong>.</li>
+    <li>Keep guessing until you crack it!</li>
+</ul>
+
+<h3>🔥 Clue Scale:</h3>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>Feedback</th>
+        <th>Meaning</th>
+    </tr>
+    <tr>
+        <td>🔥 Very Hot</td>
+        <td>Less than 500 km away</td>
+    </tr>
+    <tr>
+        <td>🌡️ Warm</td>
+        <td>500–1500 km away</td>
+    </tr>
+    <tr>
+        <td>❄️ Cold</td>
+        <td>1500–4000 km away</td>
+    </tr>
+    <tr>
+        <td>🧊 Freezing</td>
+        <td>More than 4000 km away</td>
+    </tr>
+</table>
+
+<p>
+    <strong>Example:</strong><br>
+    You guess “Germany.” I reply:<br>
+    <em>🌡️ Warm — about 800 km away.</em>
+</p>
+
+<p>NOTE: Distances are calculated based on the country's center!</p>
+
+<input @bind="userGuess" placeholder="Enter a country name" />
+<button @onclick="SubmitGuess">Guess</button>
+
+<p>@clue</p>
+
+@code {
+    private string userGuess = "";
+    private string clue = "";
+
+    // Mystery country coordinates
+    private double mysteryLat = 47.1625;
+    private double mysteryLon = 19.5033;
+
+    private async Task SubmitGuess()
+    {
+        try
+        {
+            if (userGuess.ToLower()=="hungary")
+            {
+                clue = GetClueFromDistance(0);
+                return;
+            }
+            var url = $"https://restcountries.com/v3.1/name/{userGuess}";
+            var response = await Http.GetFromJsonAsync<List<RestCountry>>(url);
+
+            if (response != null && response.Count > 0)
+            {
+                var guessedLat = response[0].LatLng[0];
+                var guessedLon = response[0].LatLng[1];
+
+                var distance = CalculateDistance(guessedLat, guessedLon, mysteryLat, mysteryLon);
+                clue = GetClueFromDistance(distance);
+            }
+            else
+            {
+                clue = "❌ Country not found. Try again.";
+            }
+        }
+        catch
+        {
+            clue = "⚠️ Error fetching country data.";
+        }
+    }
+
+    private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
+    {
+        const double R = 6371; // Earth radius in km
+        var dLat = ToRadians(lat2 - lat1);
+        var dLon = ToRadians(lon2 - lon1);
+
+        var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
+                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+
+        var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+        return R * c;
+    }
+
+    private double ToRadians(double deg) => deg * Math.PI / 180;
+
+    private string GetClueFromDistance(double distance)
+    {
+        if (distance <= 0) return $"✨🎊🎉🥳💥 You are correct! The country is Hungary";
+        if (distance < 500) return $"🔥 Very Hot — {Math.Round(distance)} km away. You're basically adjacent!";
+        if (distance < 1500) return $"🌡️ Warm — {Math.Round(distance)} km away.";
+        if (distance < 4000) return $"❄️ Cold — {Math.Round(distance)} km away.";
+        return $"🧊 Freezing — {Math.Round(distance)} km away.";
+    }
+
+    public class RestCountry
+    {
+        public List<double> LatLng { get; set; }
+    }
+}
