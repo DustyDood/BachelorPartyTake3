@@ -1,9 +1,10 @@
-﻿@page "/GlobleGuess"
+﻿@page "/Stepthree"
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
 @using System.Net.Http.Json
 
 
-<h3>GlobleGuess</h3>
+<h3>Puzzle Three</h3>
 
 <h2>🌍 Guess the <strong>C</strong>ountry Challenge</h2>
 
@@ -56,15 +57,27 @@
 
 <p>@clue</p>
 
+<button class="btn btn-primary">Find your location below</button>
+
 @if (countryFound)
 {
     <p>Speaking of Hungary, I hope you're <strong>Hung</strong>a<strong>ry</strong>!</p>
 }
 
+
+
+@if (LocationFound)
+{
+    <button>Click me once you have finished this location's activity!</button>
+}
+
+
 @code {
     private string userGuess = "";
     private string clue = "";
     private bool countryFound = false;
+    public bool LocationFound { get; set; }
+
 
     // Mystery country coordinates
     private double mysteryLat = 47.1625;
@@ -134,4 +147,35 @@
     {
         public List<double> LatLng { get; set; }
     }
+
+    @code {
+    private string? Latitude { get; set; }
+    private string? Longitude { get; set; }
+    private string? ErrorMessage { get; set; }
+
+    private async Task GetLocationAsync()
+    {
+        try
+        {
+            var position = await JSRuntime.InvokeAsync<GeolocationPosition>("navigator.geolocation.getCurrentPosition");
+            Latitude = position.Coords.Latitude.ToString();
+            Longitude = position.Coords.Longitude.ToString();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Error retrieving location: {ex.Message}";
+        }
+    }
+
+    public class GeolocationPosition
+    {
+        public GeolocationCoordinates Coords { get; set; } = new();
+    }
+
+    public class GeolocationCoordinates
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+}
 }

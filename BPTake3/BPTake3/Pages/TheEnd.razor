@@ -1,9 +1,38 @@
-﻿@page "/Theend"
+﻿@inject IJSRuntime JSRuntime
+@page "/Stepfour"
 
-<h3>TheEnd</h3>
+<h3>Puzzle Four</h3>
 
 <p>As our day comes to an end, I think you might be able to figure this one out just by distance. Good luck!</p>
 
 @code {
+    private string? Latitude { get; set; }
+    private string? Longitude { get; set; }
+    private string? ErrorMessage { get; set; }
 
+    private async Task GetLocationAsync()
+    {
+        try
+        {
+            var position = await JSRuntime.InvokeAsync<GeolocationPosition>("navigator.geolocation.getCurrentPosition");
+            Latitude = position.Coords.Latitude.ToString();
+            Longitude = position.Coords.Longitude.ToString();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Error retrieving location: {ex.Message}";
+        }
+    }
+
+    public class GeolocationPosition
+    {
+        public GeolocationCoordinates Coords { get; set; } = new();
+    }
+
+    public class GeolocationCoordinates
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
 }
+

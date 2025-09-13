@@ -3,11 +3,19 @@
 
 @page "/StepTwo"
 
-<h3>Step1</h3>
+<h3>Puzzle Two</h3>
 
-<p>Congratulations, Dusty! If Jonny Chue is reading this, it means your SPA is working!</p>
+<p>Congratulations on making it out! How did I know? I don't! This message will be awkward if we fail... </p>
 
 <p>If he's not reading it, who cares! No one will know you talk to yourself. Wait... I think everyone already knows that. Oh well!</p>
+
+
+
+
+
+
+
+
 
 <p>_his is not a drive by!<br />Just a shy guy looking for a two ply<br />Hefty bag won't hold myyyy love</p>
 
@@ -19,13 +27,19 @@
 
 <p>Two words: _____ ____</p>
 
-<button>Find your location below</button>
+<button>Find your destination below</button>
+
+@if (LocationFound)
+{
+    <button>Click me once you have finished this location's activity!</button>
+}
 
 
 @code {
     private string? Latitude { get; set; }
     private string? Longitude { get; set; }
     private string? ErrorMessage { get; set; }
+    public bool LocationFound { get; set; }
 
     private async Task GetLocationAsync()
     {

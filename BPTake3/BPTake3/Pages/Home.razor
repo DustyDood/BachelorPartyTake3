@@ -18,11 +18,17 @@
 
 <button class="btn btn-primary">Find your location below</button>
 
+@if (LocationFound)
+{
+    <button>Click me once you have finished this location's activity!</button>
+}
+
 
 @code {
     private string? Latitude { get; set; }
     private string? Longitude { get; set; }
     private string? ErrorMessage { get; set; }
+    public bool LocationFound { get; set; }
 
     private async Task GetLocationAsync()
     {

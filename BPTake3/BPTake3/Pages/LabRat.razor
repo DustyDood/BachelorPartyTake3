@@ -27,14 +27,41 @@
 <br />
 <br />
 
+@if (LocationFound)
+{
+    <button>Click me once you have finished this location's activity!</button>
+}
+
 
 @code {
-    private string phoneNumber = "";
+    private string? Latitude { get; set; }
+    private string? Longitude { get; set; }
+    private string? ErrorMessage { get; set; }
+    public bool LocationFound { get; set; }
 
-    private async Task RevealPhoneNumber()
+    private async Task GetLocationAsync()
     {
-        var encoded = "KzEyMzQ1Njc4OTA=";
-        phoneNumber = await JSRuntime.InvokeAsync<string>("decodeBase64", encoded);
+        try
+        {
+            var position = await JSRuntime.InvokeAsync<GeolocationPosition>("navigator.geolocation.getCurrentPosition");
+            Latitude = position.Coords.Latitude.ToString();
+            Longitude = position.Coords.Longitude.ToString();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Error retrieving location: {ex.Message}";
+        }
+    }
+
+    public class GeolocationPosition
+    {
+        public GeolocationCoordinates Coords { get; set; } = new();
+    }
+
+    public class GeolocationCoordinates
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 
 }
