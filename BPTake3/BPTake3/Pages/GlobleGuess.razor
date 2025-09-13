@@ -5,17 +5,17 @@
 
 <h3>GlobleGuess</h3>
 
-<h2>🌍 Guess the Country Challenge</h2>
+<h2>🌍 Guess the <strong>C</strong>ountry Challenge</h2>
 
 <p>
-    <strong>Welcome, traveler!</strong><br>
-    You're about to embark on a geography guessing game. Your mission: figure out the mystery country I've locked away in my digital vault.
+    <em>Welcome, traveler!</em><br>
+    You're about to emba<strong>r</strong>k on a geography guessing game. Your mission: figure out the mystery country I've locked away in my digital vault.
 </p>
 
 <h3>🕹️ How to Play:</h3>
 <ul>
-    <li>Type the name of any country.</li>
-    <li>I’ll tell you how close your guess is to the mystery country using <strong>distance clues</strong>.</li>
+    <li>Type the name of any c<strong>o</strong>untry.</li>
+    <li>I’ll tell you ho<strong>w</strong> close your guess is to the mystery country using distance clues.</li>
     <li>Keep guessing until you crack it!</li>
 </ul>
 
@@ -49,16 +49,22 @@
     <em>🌡️ Warm — about 800 km away.</em>
 </p>
 
-<p>NOTE: Distances are calculated based on the country's center!</p>
+<p>NOTE: <strong>D</strong>istances are calculated based on the country's center!</p>
 
 <input @bind="userGuess" placeholder="Enter a country name" />
 <button @onclick="SubmitGuess">Guess</button>
 
 <p>@clue</p>
 
+@if (countryFound)
+{
+    <p>Speaking of Hungary, I hope you're <strong>Hung</strong>a<strong>ry</strong>!</p>
+}
+
 @code {
     private string userGuess = "";
     private string clue = "";
+    private bool countryFound = false;
 
     // Mystery country coordinates
     private double mysteryLat = 47.1625;
@@ -113,7 +119,11 @@
 
     private string GetClueFromDistance(double distance)
     {
-        if (distance <= 0) return $"✨🎊🎉🥳💥 You are correct! The country is Hungary";
+        if (distance <= 0)
+        {
+            countryFound = true;
+            return $"✨🎊🎉🥳💥 You are correct! The country is Hungary";
+        }
         if (distance < 500) return $"🔥 Very Hot — {Math.Round(distance)} km away. You're basically adjacent!";
         if (distance < 1500) return $"🌡️ Warm — {Math.Round(distance)} km away.";
         if (distance < 4000) return $"❄️ Cold — {Math.Round(distance)} km away.";
