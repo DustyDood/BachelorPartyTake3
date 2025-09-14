@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "BPTake3",
   "resources": {
-    "hash": "sha256-pDIrRpZWYC5MuFFz97PfAanAhwG/zWhNiky3U/LqBqI=",
+    "hash": "sha256-23gagEWcgIyynUyBomuIcb21YT0lq50bdJ7FdCzDnlM=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-7j8Y9I6JgJ/4/1qxU6eOJPc3NpvZVd7ILs8OdPuQuTI="
     },
@@ -49,7 +49,7 @@
       "System.Text.Json.wasm": "sha256-WbayhVGwCeC6tFrjiXzNyZbC93kLIuensvvpgZPiK2Q=",
       "System.Text.RegularExpressions.wasm": "sha256-amyl1Zsuf+PHSXqju/cl50LQlTKfUNpDi6hcFh10yrM=",
       "System.Private.CoreLib.wasm": "sha256-61ewF/r/mNWnDfcOOssFG5QGuCxlWqzJ92ke8UbIbGo=",
-      "BPTake3.wasm": "sha256-B2WMQR5WkjoRnSpaoODfKMjFA2jTZTi+kTsDjQmpHY8="
+      "BPTake3.wasm": "sha256-9fhtV+k831YwXF6EQJNM7YS6S3IE7OiciOgMLnfaaGo="
     }
   },
   "cacheBootResources": true,
