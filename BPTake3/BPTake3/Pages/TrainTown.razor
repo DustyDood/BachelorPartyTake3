@@ -40,7 +40,9 @@
 @if (LocationFound)
 {
     <p>You are close enough! Congrats!</p>
-    <button class="btn btn-primary" @onclick='() => navigationManager.NavigateTo("/StepThree")'>Click me once you have finished this location's activity!</button>
+
+    // DUSTY: Change this for local testing
+    <button class="btn btn-primary" @onclick='() => navigationManager.NavigateTo("StepThree")'>Click me once you have finished this location's activity!</button>
 }
 
 
