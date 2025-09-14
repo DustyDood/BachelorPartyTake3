@@ -1,4 +1,5 @@
 ﻿@inject IJSRuntime JSRuntime
+@inject NavigationManager navigationManager
 
 @page "/"
 
@@ -24,6 +25,7 @@
     <p>Latitude: @Latitude</p>
     <p>Longitude: @Longitude</p>
     <p>You are currently @Distance miles away from the target!</p>
+    <p>Also, I'm not going to reveal your location since this is on a public repo. Go ahead and click the above button a few more times to trigger the failsafe. </p>
 }
 @if (!string.IsNullOrEmpty(ErrorMessage))
 {
@@ -38,12 +40,8 @@
 @if (LocationFound)
 {
     <p>You are close enough! Congrats!</p>
-    <button class="btn btn-primary">Click me once you have finished this location's activity!</button>
+    <button class="btn btn-primary" @onclick='() => navigationManager.NavigateTo("/StepOne")'>Click me once you have finished this location's activity!</button>
 }
-
-LocationFound: @LocationFound
-NumberOfGuesses: @numberOfGuess
-
 
 
 @code {

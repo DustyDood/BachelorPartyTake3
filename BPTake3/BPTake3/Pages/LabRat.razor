@@ -1,5 +1,5 @@
 ﻿@inject IJSRuntime JSRuntime
-
+@inject NavigationManager navigationManager
 
 @page "/StepOne"
 
@@ -30,7 +30,7 @@
 <button class="btn btn-primary" @onclick="GetLocationAsync">Find your location async below</button>
 
 
-@if (LocationFound)
+@if (numberOfGuess > 0)
 {
     <p>Latitude: @Latitude</p>
     <p>Longitude: @Longitude</p>
@@ -41,7 +41,7 @@
     <p style="color:red">@ErrorMessage</p>
 }
 
-@if (LocationFound == false && numberOfGuess >= 3)
+@if (LocationFound == false && numberOfGuess >= 5)
 {
     <button class="btn btn-secondary" @onclick="() => LocationFound = !LocationFound">Things aren't cooperating? Click me to move on.</button>
 }
@@ -49,7 +49,7 @@
 @if (LocationFound)
 {
     <p>You are close enough! Congrats!</p>
-    <button class="btn btn-primary">Click me once you have finished this location's activity!</button>
+    <button class="btn btn-primary" @onclick='() => navigationManager.NavigateTo("/StepTwo")'>Click me once you have finished this location's activity!</button>
 }
 
 
@@ -71,6 +71,7 @@
     private async Task GetLocationAsync()
     {
         Console.WriteLine("Button pressed!");
+        numberOfGuess++;
         await JSRuntime.InvokeVoidAsync("geolocationInterop.getCurrentPosition", DotNetObjectReference.Create(this));
         Distance = CalculateDistance(Position.Latitude, Position.Longitude, TargetLatitude, TargetLongitude);
 

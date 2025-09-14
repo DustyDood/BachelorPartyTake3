@@ -8,7 +8,7 @@
 <button class="btn btn-primary" @onclick="GetLocationAsync">Find your location async below</button>
 
 
-@if (LocationFound)
+@if (numberOfGuess > 0)
 {
     <p>Latitude: @Latitude</p>
     <p>Longitude: @Longitude</p>
@@ -17,6 +17,11 @@
 @if (!string.IsNullOrEmpty(ErrorMessage))
 {
     <p style="color:red">@ErrorMessage</p>
+}
+
+@if (LocationFound == false && numberOfGuess >= 5)
+{
+    <p>Sorry, but no cheat button this time! I know you know this location...</p>
 }
 
 @if (LocationFound)
@@ -32,6 +37,8 @@
     private double Distance { get; set; }
     private string? ErrorMessage { get; set; }
     public bool LocationFound { get; set; }
+    public int numberOfGuess = 0;
+
 
     private double TargetLatitude { get; set; } = 34.01919064639046;
     private double TargetLongitude { get; set; } = -118.33475988714115;
@@ -41,6 +48,7 @@
     private async Task GetLocationAsync()
     {
         Console.WriteLine("Button pressed!");
+        numberOfGuess++;
         await JSRuntime.InvokeVoidAsync("geolocationInterop.getCurrentPosition", DotNetObjectReference.Create(this));
         Distance = CalculateDistance(Position.Latitude, Position.Longitude, TargetLatitude, TargetLongitude);
 

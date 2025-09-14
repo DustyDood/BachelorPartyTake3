@@ -1,11 +1,11 @@
 ﻿@inject IJSRuntime JSRuntime
-
+@inject NavigationManager navigationManager
 
 @page "/StepTwo"
 
 <h3>Puzzle Two</h3>
 
-<p>>Poop... I got the name wrong</p>
+<p>This one's a little shorter as we just did a bunch of puzzles! </p>
 
 <p>_his is not a drive by!<br />Just a shy guy looking for a two ply<br />Hefty bag won't hold myyyy love</p>
 
@@ -17,11 +17,30 @@
 
 <p>Two words: _____ ____</p>
 
-<button>Find your destination below</button>
+<p>When googling, please add "Los Angeles" to the search!</p>
+
+<button class="btn btn-primary" @onclick="GetLocationAsync">Find your location async below</button>
+
+@if (numberOfGuess > 0)
+{
+    <p>Latitude: @Latitude</p>
+    <p>Longitude: @Longitude</p>
+    <p>You are currently @Distance miles away from the target!</p>
+}
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <p style="color:red">@ErrorMessage</p>
+}
+
+@if (LocationFound == false && numberOfGuess >= 5)
+{
+    <button class="btn btn-secondary" @onclick="() => LocationFound = !LocationFound">Things aren't cooperating? Click me to move on.</button>
+}
 
 @if (LocationFound)
 {
-    <button>Click me once you have finished this location's activity!</button>
+    <p>You are close enough! Congrats!</p>
+    <button class="btn btn-primary" @onclick='() => navigationManager.NavigateTo("/StepThree")'>Click me once you have finished this location's activity!</button>
 }
 
 
@@ -32,6 +51,8 @@
     private double Distance { get; set; }
     private string? ErrorMessage { get; set; }
     public bool LocationFound { get; set; }
+    public int numberOfGuess = 0;
+
 
     // DUSTY: UPDATED!
     private double TargetLatitude { get; set; } = 34.15401510005693;
@@ -41,6 +62,7 @@
     private async Task GetLocationAsync()
     {
         Console.WriteLine("Button pressed!");
+        numberOfGuess++;
         await JSRuntime.InvokeVoidAsync("geolocationInterop.getCurrentPosition", DotNetObjectReference.Create(this));
         Distance = CalculateDistance(Position.Latitude, Position.Longitude, TargetLatitude, TargetLongitude);
 
