@@ -36,34 +36,68 @@
 
 
 @code {
+    PositionData Position { get; set; } = new PositionData();
     private string? Latitude { get; set; }
     private string? Longitude { get; set; }
+    private double Distance { get; set; }
     private string? ErrorMessage { get; set; }
     public bool LocationFound { get; set; }
 
+    // ACTUAL: Starbucks nearby
+    // private double TargetLatitude { get; set; } = 34.01919064639046;
+    // private double TargetLongitude { get; set; } = -118.33475988714115;
+
+    // TESTING: These are our leasing office
+    private double TargetLatitude { get; set; } = 33.73789467162089;
+    private double TargetLongitude { get; set; } = -117.76360090695829;
+
+
     private async Task GetLocationAsync()
     {
-        try
-        {
-            var position = await JSRuntime.InvokeAsync<GeolocationPosition>("navigator.geolocation.getCurrentPosition");
-            Latitude = position.Coords.Latitude.ToString();
-            Longitude = position.Coords.Longitude.ToString();
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = $"Error retrieving location: {ex.Message}";
-        }
+        Console.WriteLine("Button pressed!");
+        await JSRuntime.InvokeVoidAsync("geolocationInterop.getCurrentPosition", DotNetObjectReference.Create(this));
+        Distance = CalculateDistance(Position.Latitude, Position.Longitude, TargetLatitude, TargetLongitude);
+
+        if (Distance < 0.1) LocationFound = true;
     }
 
-    public class GeolocationPosition
+    [JSInvokable]
+    public void ReceivePosition(PositionData position)
     {
-        public GeolocationCoordinates Coords { get; set; } = new();
+        Latitude = position.Latitude.ToString();
+        Longitude = position.Longitude.ToString();
+        Position.Latitude = position.Latitude;
+        Position.Longitude = position.Longitude;
+        Console.WriteLine("Location grabbed");
     }
 
-    public class GeolocationCoordinates
+    [JSInvokable]
+    public void ReceiveError(string message)
+    {
+        ErrorMessage = $"Error retrieving location: {message}";
+        LocationFound = false;
+    }
+
+    public class PositionData
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
     }
+
+    private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
+    {
+        const double R = 6371; // Radius of Earth in kilometers
+        var dLat = ToRadians(lat2 - lat1);
+        var dLon = ToRadians(lon2 - lon1);
+
+        var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
+                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+
+        var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+        return Math.Round(R * c * 0.621371, 2);
+    }
+
+    private double ToRadians(double deg) => deg * Math.PI / 180;
 }
 
