@@ -41,6 +41,11 @@
     <p style="color:red">@ErrorMessage</p>
 }
 
+@if (LocationFound == false && numberOfGuess >= 3)
+{
+    <button class="btn btn-secondary" @onclick="() => LocationFound = !LocationFound">Things aren't cooperating? Click me to move on.</button>
+}
+
 @if (LocationFound)
 {
     <p>You are close enough! Congrats!</p>
@@ -55,6 +60,8 @@
     private double Distance { get; set; }
     private string? ErrorMessage { get; set; }
     public bool LocationFound { get; set; }
+    public int numberOfGuess = 0;
+
 
     // DUSTY: Updated!
     private double TargetLatitude { get; set; } = 34.03942773600165;

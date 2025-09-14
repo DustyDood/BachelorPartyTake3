@@ -80,6 +80,11 @@
     <p style="color:red">@ErrorMessage</p>
 }
 
+@if (LocationFound == false && numberOfGuess >= 3)
+{
+    <button class="btn btn-secondary" @onclick="() => LocationFound = !LocationFound">Things aren't cooperating? Click me to move on.</button>
+}
+
 @if (LocationFound)
 {
     <p>You are close enough! Congrats!</p>
@@ -91,6 +96,7 @@
     private string userGuess = "";
     private string clue = "";
     private bool countryFound = false;
+    public int numberOfGuess = 0;
 
     PositionData Position { get; set; } = new PositionData();
     private string? Latitude { get; set; }
@@ -169,9 +175,9 @@
         public List<double> LatLng { get; set; }
     }
 
-    // DUSTY: UPDATE THIS FOR NEXT LOCATION!!!
-    private double TargetLatitude { get; set; } = 33.73789467162089;
-    private double TargetLongitude { get; set; } = -117.76360090695829;
+    // DUSTY: UPDATED!
+    private double TargetLatitude { get; set; } = 34.1522163393604;
+    private double TargetLongitude { get; set; } = -118.35211183089307;
 
 
     private async Task GetLocationAsync()

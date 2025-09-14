@@ -19,7 +19,7 @@
 <button class="btn btn-primary" @onclick="GetLocationAsync">Find your location async below</button>
 
 
-@if (LocationFound)
+@if (numberOfGuess > 0)
 {
     <p>Latitude: @Latitude</p>
     <p>Longitude: @Longitude</p>
@@ -30,11 +30,19 @@
     <p style="color:red">@ErrorMessage</p>
 }
 
+@if (LocationFound == false && numberOfGuess >= 5)
+{
+    <button class="btn btn-secondary" @onclick="() => LocationFound = !LocationFound">Things aren't cooperating? Click me to move on.</button>
+}
+
 @if (LocationFound)
 {
     <p>You are close enough! Congrats!</p>
     <button class="btn btn-primary">Click me once you have finished this location's activity!</button>
 }
+
+LocationFound: @LocationFound
+NumberOfGuesses: @numberOfGuess
 
 
 
@@ -45,19 +53,22 @@
     private double Distance { get; set;  }
     private string? ErrorMessage { get; set; }
     public bool LocationFound { get; set; }
+    public int numberOfGuess = 0;
+
 
     // ACTUAL: Starbucks nearby
-    // private double TargetLatitude { get; set; } = 34.01919064639046;
-    // private double TargetLongitude { get; set; } = -118.33475988714115;
+    private double TargetLatitude { get; set; } = 34.01919064639046;
+    private double TargetLongitude { get; set; } = -118.33475988714115;
 
     // TESTING: These are our leasing office
-    private double TargetLatitude { get; set; } = 33.73789467162089;
-    private double TargetLongitude { get; set; } = -117.76360090695829;
+    // private double TargetLatitude { get; set; } = 33.73789467162089;
+    // private double TargetLongitude { get; set; } = -117.76360090695829;
 
 
     private async Task GetLocationAsync()
     {
         Console.WriteLine("Button pressed!");
+        numberOfGuess++;
         await JSRuntime.InvokeVoidAsync("geolocationInterop.getCurrentPosition", DotNetObjectReference.Create(this));
         Distance = CalculateDistance(Position.Latitude, Position.Longitude, TargetLatitude, TargetLongitude);
 

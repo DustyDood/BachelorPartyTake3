@@ -5,17 +5,7 @@
 
 <h3>Puzzle Two</h3>
 
-<p>Congratulations on making it out! How did I know? I don't! This message will be awkward if we fail... </p>
-
-<p>If he's not reading it, who cares! No one will know you talk to yourself. Wait... I think everyone already knows that. Oh well!</p>
-
-
-
-
-
-
-
-
+<p>>Poop... I got the name wrong</p>
 
 <p>_his is not a drive by!<br />Just a shy guy looking for a two ply<br />Hefty bag won't hold myyyy love</p>
 
@@ -43,13 +33,9 @@
     private string? ErrorMessage { get; set; }
     public bool LocationFound { get; set; }
 
-    // ACTUAL: Starbucks nearby
-    // private double TargetLatitude { get; set; } = 34.01919064639046;
-    // private double TargetLongitude { get; set; } = -118.33475988714115;
-
-    // TESTING: These are our leasing office
-    private double TargetLatitude { get; set; } = 33.73789467162089;
-    private double TargetLongitude { get; set; } = -117.76360090695829;
+    // DUSTY: UPDATED!
+    private double TargetLatitude { get; set; } = 34.15401510005693;
+    private double TargetLongitude { get; set; } = -118.3085300510556;
 
 
     private async Task GetLocationAsync()
@@ -58,7 +44,7 @@
         await JSRuntime.InvokeVoidAsync("geolocationInterop.getCurrentPosition", DotNetObjectReference.Create(this));
         Distance = CalculateDistance(Position.Latitude, Position.Longitude, TargetLatitude, TargetLongitude);
 
-        if (Distance < 0.1) LocationFound = true;
+        if (Distance < 0.5) LocationFound = true;
     }
 
     [JSInvokable]

@@ -21,8 +21,8 @@
 
 @if (LocationFound)
 {
-    <p>You are close enough! Congrats!</p>
-    <button class="btn btn-primary">Click me once you have finished this location's activity!</button>
+    <p>Are you're back. Congratulations!! Time for dessert.</p>
+
 }
 
 @code {
@@ -44,7 +44,7 @@
         await JSRuntime.InvokeVoidAsync("geolocationInterop.getCurrentPosition", DotNetObjectReference.Create(this));
         Distance = CalculateDistance(Position.Latitude, Position.Longitude, TargetLatitude, TargetLongitude);
 
-        if (Distance < 0.1) LocationFound = true;
+        if (Distance < 1.0) LocationFound = true;
     }
 
     [JSInvokable]
